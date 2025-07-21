@@ -1,49 +1,35 @@
 #include <stdio.h>
 
-int binary(int x, int v[], int n);
+double atof(char s[]);
 
 int main() {
-    int arraylen = 100;
-    int v[arraylen];
-
-    for (int i = 0; i < arraylen; i++) {
-        v[i] = i*2;
-    }
-
-    for (int i = 0; i < arraylen; i++) {
-        printf("%d\n", v[i]);
-    }
-    printf("\n");
-
-    int res = binary(20, v, arraylen);
-
-    printf("%d", res);
+    double a = atof("-345.135");
+    printf("%g", a);
 
     return 0;
 }
 
-int binary(int x, int v[], int n) {
-    int low, high, mid;
+int converttoi(char c) {
+    return c - '0';
+}
 
-    low = 0;
-    high = n - 1;
-    while (low < high) {
-        mid = (high + low) / 2;
+double atof(char s[]) {
+    int sign = 1, power = 0;
+    double number = 0;
 
-        if (x < v[mid]) {
-            high = mid - 1;
-        } else {
-            low = mid + 1;
+    if (s[0] == '-') {
+        sign = -1;
+    }
+    for (int i = sign == -1 ? 1 : 0; s[i] != '\0'; ++i) {
+        if (s[i] == '.') {
+            ++i;
+            power = 1;
         }
-    }
 
-    if (v[high] == x) {
-        printf("a");
-        return high;
+        if (power != 0) { // if number after .
+            power *= 10;
+        }
+        number = number * 10 + converttoi(s[i]);
     }
-    if (v[high - 1] == x) {
-        printf("b");
-        return high - 1;
-    }
-    return -1;
+    return sign * number / power;
 }
