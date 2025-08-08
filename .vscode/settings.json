@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "ios": "c"
+        "ios": "c",
+        "netdb.h": "c",
+        "string.h": "c"
     }
 }
