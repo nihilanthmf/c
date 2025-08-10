@@ -1,3 +1,7 @@
+/*
+ * A simple implementation of John Conway's Game of Life
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

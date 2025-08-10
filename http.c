@@ -1,3 +1,7 @@
+/*
+ * A very simple HTTP server in C aka C frontend framework :)
+*/
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -59,7 +63,7 @@ int main(int argc, char *argv[]) {
     // configuring for the getaddrinfo 
     memset(&hints, 0, sizeof hints);
     hints.ai_family = AF_INET;     // don't care IPv4 or IPv6
-    hints.ai_socktype = SOCK_STREAM; // TCP stream sockets
+    hints.ai_socktype = SOCK_STREAM; 
     hints.ai_flags = AI_PASSIVE;     // fill in my IP for me
 
     // get the info about the local network
@@ -85,7 +89,7 @@ int main(int argc, char *argv[]) {
     }
     printf("Socket bound!\n\n");
 
-    // listing on that socket with the max queue length of QUEUE_LEN
+    // listening on that socket with the max queue length of QUEUE_LEN
     listen(listening_socket, QUEUE_LEN);
 
     // "game loop"
@@ -100,67 +104,19 @@ int main(int argc, char *argv[]) {
             printf("%s\n\n", buf);
         }
 
-
-        // getting the body of the request
-        const int buffer_size = 1024;
-        int next_is_value = 0;
-        int values[2] = {0, 0};
-        int current_value_index = 0;
-        char current_value[buffer_size];
-        int current_value_inside_index = 0;
-
-        for (int i = 0; i < buffer_size; ++i) {
-            current_value[i] = '\0';
-        }
-
-        for (int i = 0; i < bytes_received; ++i) {
-            if (buf[i] == '=') {
-                next_is_value = 1;
-            } else if (next_is_value) {
-                // this is where we reach the end of the arg and the next one follows
-                if (buf[i] == '&') {
-                    next_is_value = 0;
-
-                    int num = atoi(current_value, buffer_size);
-                    values[current_value_index] = num;
-
-                    // resetting the current value array
-                    for (int i = 0; i < buffer_size; ++i) {
-                        current_value[i] = '\0';
-                    }
-                    current_value_inside_index = 0;
-                    ++current_value_index;
-                } else {
-                    current_value[current_value_inside_index] = buf[i];
-                    ++current_value_inside_index;
-                }
-            }
-        }
-        // append the current arg in the array
-        int num = atoi(current_value, buffer_size);
-        values[current_value_index] = num;
-
-        printf("\n%d\n", values[0]);
-        printf("%d\n", values[1]);
-
-        const int s_buffer = 64;
-        char s[s_buffer];
-        for (int i = 0; i > s_buffer; ++i) {
-            s[i] = '\0';
-        }
-        itoa(values[0] + values[1], s, s_buffer);
-
-        printf("\nsum = %s\n", s);
+        char response[] = 
+        "<html>"
+        "<head><title>badass C frontend framework</title><style>h1 {color: #ff0000;} </style></head>"
+        "<body><h1>Welcome to C frontend framework</h1><h2>The sum of the two numbers you sent is exactly 13</h2></body>"
+        "</html>\n";
 
         // send the response back once the whole request has been received
         char msg[1024];
         sprintf(msg, "HTTP/1.1 200 OK\r\n"
-            "Content-Type: text/plain\r\n"
+            "Content-Type: text/html\r\n"
             "Content-Length: %d\r\n"
             "\r\n"
-            "The sum of the two numbers is %s\n", (int)(31+strlen(s)), s);
-
-        printf("\n\n%s\n\n", msg);
+            "%s", (int)sizeof(response), response);
 
         int bytes_sent = send(communicating_socket, msg, sizeof(msg), 0);
     }
