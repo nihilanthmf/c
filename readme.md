@@ -1,1 +1,1 @@
-https://beej.us/guide/bgnet/html
+great guide about http server and how it all works in C: https://beej.us/guide/bgnet/html
