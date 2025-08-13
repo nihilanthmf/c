@@ -48,6 +48,7 @@ char env[HEIGHT][WIDTH] = {
     {1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1},
 };
 
+// this function magically makes it so the terminal can read a character without the need for a user to press the Enter key
 char getch(void) {
     struct termios oldt, newt;
     char ch;

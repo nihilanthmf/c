@@ -1,5 +1,5 @@
 /*
- * A very simple HTTP server in C aka C frontend framework :)
+* A very simple HTTP server in C aka C frontend framework :)
 */
 
 #include <stdio.h>
@@ -20,7 +20,7 @@ int atoi(char s[], int s_len) {
     for (int i = s_len - 1; i >= 0; --i) {
         if (s[i] != '\0' && s[i] >= '0' && s[i] <= '9') {
             res += (s[i] - '0') * multiplier;
-            multiplier *= 10;
+           multiplier *= 10;
         }
     }
 
